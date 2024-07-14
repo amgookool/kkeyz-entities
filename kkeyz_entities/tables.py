@@ -200,13 +200,13 @@ class UserProfile(IntegerBase, Base):
     # Relationships
     # One-to-Many
     addresses = Relationship("Address", back_populates="user_profiles", passive_deletes=True)
-    # orders = Relationship("Order", back_populates="user_profiles", passive_deletes=True)
+    orders = Relationship("Order", back_populates="user_profiles", passive_deletes=True)
     reviews = Relationship("ProductReviews", back_populates="user_profiles", passive_deletes=True)
-    # wishlist = Relationship("WishList", back_populates="user_profiles", passive_deletes=True)
+    wishlist = Relationship("WishList", back_populates="user_profiles", passive_deletes=True)
 
     # One-to-One
     user = Relationship("User", back_populates="user_profiles", uselist=False)
-    # cart = Relationship("Cart", back_populates="user_profiles", passive_deletes=True, uselist=False)
+    cart = Relationship("Cart", back_populates="user_profiles", passive_deletes=True, uselist=False)
 
     def __repr__(self):
         return f"{self.__class__.__name__}: {self.first_name} {self.last_name}(type={self.user_type}, id={self.id})"
@@ -275,85 +275,85 @@ class WishList(IntegerBase, Base):
     name = Column("name", String(255), nullable=False)
 
 
-# class Cart(IntegerBaseModel):
-#     """The Cart Model
+class Cart(IntegerBase, Base):
+    """The Cart Model
     
-#     This is a one-to-many relationship with the User model.
-#         - A user can have multiple carts
-#         - A cart can only belong to one user
+    This is a one-to-many relationship with the User model.
+        - A user can have multiple carts
+        - A cart can only belong to one user
     
-#     The 'is_converted' flag is used to indicate that the cart has been converted to an order.
+    The 'is_converted' flag is used to indicate that the cart has been converted to an order.
 
-#     The 'subtotal', 'tax' and 'total' fields are calculated when the cart is converted to an order.
+    The 'subtotal', 'tax' and 'total' fields are calculated when the cart is converted to an order.
 
-#     """
-#     # Metadata
-#     __tablename__ = "carts"
-#     # Fields
-#     user_id = Column(
-#         Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False, index=True
-#     )
-#     product_id = Column(
-#         Integer, ForeignKey("products.id", ondelete="CASCADE"), nullable=False, index=True
-#     )
-#     is_converted = Column("is_converted", Boolean, nullable=False, default=False)
-#     subtotal = Column("subtotal", Float, nullable=False)
-#     tax = Column("tax", Float, nullable=False)
-#     total = Column("total", Integer, nullable=False)
-
-#     # Relationships
-
-
-# class CartItem(IntegerBaseModel):
-#     # Metadata
-#     __tablename__ = "cart_items"
-#     # Fields
-#     cart_id = Column(
-#         Integer, ForeignKey("carts.id", ondelete="CASCADE"), nullable=False, index=True
-#     )
-#     product_id = Column(
-#         Integer, ForeignKey("products.id", ondelete="CASCADE"), nullable=False, index=True
-#     )
-#     quantity = Column("quantity", Float, nullable=False)
-#     coupon = Column("coupon", String(255), nullable=True)
-#     discount = Column("discount", Float, nullable=True)
-
-#     # Relationships
-
-
-
-# class Order(UUIDBaseModel):
-#     """The Order Model
-#     This is a one-to-many relationship with the User model.
-#         - An order can only belong to one user
-#         - A user can have multiple orders
-#     """
-
-#     # Metadata
-#     __tablename__ = "orders"
-#     # Fields
-#     user_id = Column(
-#         Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False, index=True
-#     )
-#     # Relationships
-#     user = Relationship("UserProfile", back_populates="orders")
-
-#     def __repr__(self):
-#         return f"{self.__class__.__name__}: Order Id:{self.id}"
-
-
-
-
-# class Payment(IntegerBaseModel):
+    """
     # Metadata
-    # __tablename__ = "payments"
-    # # Fields
-    # user_id = Column(
-    #     Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False, index=True
-    # )
-    # order_id = Column(
-    #     UUID, ForeignKey("orders.", ondelete="CASCADE"), nullable=False, index=True
-    # )
-    # total = Column("total", Float, nullable=False)
+    __tablename__ = "carts"
+    # Fields
+    user_id = Column(
+        Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    product_id = Column(
+        Integer, ForeignKey("products.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    is_converted = Column("is_converted", Boolean, nullable=False, default=False)
+    subtotal = Column("subtotal", Float, nullable=False)
+    tax = Column("tax", Float, nullable=False)
+    total = Column("total", Integer, nullable=False)
+
+    # Relationships
+
+
+class CartItem(IntegerBase, Base):
+    # Metadata
+    __tablename__ = "cart_items"
+    # Fields
+    cart_id = Column(
+        Integer, ForeignKey("carts.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    product_id = Column(
+        Integer, ForeignKey("products.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    quantity = Column("quantity", Float, nullable=False)
+    coupon = Column("coupon", String(255), nullable=True)
+    discount = Column("discount", Float, nullable=True)
+
+    # Relationships
+
+
+
+class Order(UUIDBase, Base):
+    """The Order Model
+    This is a one-to-many relationship with the User model.
+        - An order can only belong to one user
+        - A user can have multiple orders
+    """
+
+    # Metadata
+    __tablename__ = "orders"
+    # Fields
+    user_id = Column(
+        Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    # Relationships
+    user = Relationship("UserProfile", back_populates="orders")
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}: Order Id:{self.id}"
+
+
+
+
+class Payment(IntegerBase,Base):
+    # Metadata
+    __tablename__ = "payments"
+    # Fields
+    user_id = Column(
+        Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    order_id = Column(
+        UUID, ForeignKey("orders.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    total = Column("total", Float, nullable=False)
 
     # Relationships
