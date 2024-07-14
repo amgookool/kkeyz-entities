@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "kkeyz-entities"
+version = "0.1.0"
+description = "database entities for koolkeyz web apps"
+authors = ["Adrian Gookool <amgookool@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+SQLAlchemy = "^2.0.31"
+alembic = "^1.13.2"
+psycopg2-binary = "^2.9.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.extras]
+pgsql = ["psycopg2"]
+databases = ["psycopg2"]
+
