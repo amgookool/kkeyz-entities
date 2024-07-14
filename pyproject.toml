@@ -12,6 +12,7 @@ alembic = "^1.13.2"
 psycopg2-binary = "^2.9.9"
 
 
+pymongo = "^4.8.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
